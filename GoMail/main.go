@@ -1,37 +1,27 @@
-// package main
+package main
 
-// Masalah Less secure apps
-// import (
-// 	"fmt"
-// 	"log"
+import (
+	"fmt"
+	"log"
 
-// 	mail "github.com/xhit/go-simple-mail"
-// )
+	"gopkg.in/gomail.v2"
+)
 
-// func main() {
-// 	// Create a new email message
-// 	email := mail.NewMSG()
+func main() {
+	// Inisialisasi konfigurasi pengiriman email
+	mailer := gomail.NewMessage()
+	mailer.SetHeader("From", "youremail@example.com")
+	mailer.SetHeader("To", "pemulihan7cf@gmail.com")
+	mailer.SetHeader("Subject", "Email Masuk")
+	mailer.SetBody("text/plain", "Selamat datang di email mahasiswa")
 
-// 	// Set the subject and body of the message
-// 	email.SetSubject("Email konfirmasi Pesan Masuk ")
-// 	email.SetBody(mail.TextHTML, "<h1>Haloo Yudis,</h1><p>Selamat datang di Email Mahasiswa ITHB.</p>")
+	// Konfigurasi koneksi SMTP
+	dialer := gomail.NewDialer("smtp.gmail.com", 587, "youremail@example.com", "yourpassword")
 
-// 	// Set the sender and recipient of the message
-// 	email.SetFrom("emailmahasiswa@gmail.com").
-// 		AddTo("yudistiraprimapradana@gmail.com")
+	// Mengirim email
+	if err := dialer.DialAndSend(mailer); err != nil {
+		log.Fatalf("Failed to send email: %v", err)
+	}
 
-// 	// Set up the SMTP client to send the message
-// 	server := mail.NewSMTPClient()
-// 	server.Host = "smtp.gmail.com"
-// 	server.Port = 587
-// 	server.Username = "emailmahasiswa@gmail.com"
-// 	server.Password = "12345678"
-// 	server.Encryption = mail.EncryptionTLS
-
-// 	// Send the email
-// 	err := email.SendWith(server)
-// 	if err != nil {
-// 		log.Fatalf("failed to send email: %v", err)
-// 	}
-
-// 	fmt.Println("Email sent successfully!")
+	fmt.Println("Email sent successfully.")
+}
